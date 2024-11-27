@@ -1,17 +1,15 @@
-﻿using KURSACH;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.IO;
-using System.Drawing;
-using static KURSACH.Form2;
 
 namespace KURSACH
 {
     public partial class Form1 : Form
     {
-        // Класс для представления графа
+        // Клас для представлення графа
         public class Graph
         {
             public Dictionary<string, Vertex> Vertices { get; private set; }
@@ -23,40 +21,40 @@ namespace KURSACH
                 AdjacencyList = new Dictionary<string, List<Edge>>();
             }
 
-            // Добавление вершины
+            // Додавання вершини до графа
             public void AddVertex(string name)
             {
                 if (!Vertices.ContainsKey(name))
                 {
-                    var vertex = new Vertex(name);
-                    Vertices[name] = vertex;
-                    AdjacencyList[name] = new List<Edge>();
+                    var vertex = new Vertex(name); // Створення нової вершини
+                    Vertices[name] = vertex; // Додавання вершини в граф
+                    AdjacencyList[name] = new List<Edge>(); // Створення порожнього списку для ребер
                 }
             }
 
-            // Удаление вершины
+            // Видалення вершини з графа
             public void RemoveVertex(string name)
             {
                 if (Vertices.ContainsKey(name))
                 {
-                    Vertices.Remove(name);
-                    AdjacencyList.Remove(name);
+                    Vertices.Remove(name); // Видалення вершини
+                    AdjacencyList.Remove(name); // Видалення вершини
 
-                    // Удалить рёбра, которые ведут в эту вершину
+                    // Видалення всіх ребер, які ведуть до цієї вершини
                     foreach (var vertexEdges in AdjacencyList.Values)
                     {
-                        vertexEdges.RemoveAll(e => e.To.Name == name);
+                        vertexEdges.RemoveAll(e => e.To.Name == name); // Видалення ребер, що мають кінцеву точку в даній вершині
                     }
                 }
             }
 
-            // Добавление ребра
+            // Додавання ребра до графа
             public void AddEdge(string from, string to, int capacity)
             {
                 if (Vertices.ContainsKey(from) && Vertices.ContainsKey(to))
                 {
-                    var edge = new Edge(from, to, capacity);
-                    AdjacencyList[from].Add(edge);
+                    var edge = new Edge(from, to, capacity); // Створення нового ребра
+                    AdjacencyList[from].Add(edge); // Додавання ребра до списку суміжності
                 }
             }
 
@@ -116,7 +114,9 @@ namespace KURSACH
             }
         }
 
-        // Алгоритм Форда-Фалкерсона для нахождения максимального потока
+        //Ушаков Михайло КНТ-133
+
+        // Алгоритм Форда-Фалкерсона для знаходження максимального потоку
         public class FordFulkerson
         {
             private Graph graph;
@@ -126,19 +126,31 @@ namespace KURSACH
                 this.graph = graph;
             }
 
-            // Поиск в глубину для поиска увеличивающего пути
+            // Пошук в глибину для знаходження збільшувального шляху
             private bool DFS(string source, string sink, Dictionary<string, bool> visited, Dictionary<string, string> parent)
             {
+                // Переконуємося, що всі вершини позначені як не відвідані перед початком DFS
+                foreach (var vertex in graph.Vertices.Keys)
+                {
+                    if (!visited.ContainsKey(vertex))
+                    {
+                        visited[vertex] = false;
+                    }
+                }
+
                 visited[source] = true;
 
                 foreach (var edge in graph.GetEdges(source))
                 {
+                    // Якщо вершина ще не відвідана та ємність ребра більше за 0
                     if (!visited[edge.To.Name] && edge.Capacity > 0)  // Если вершина ещё не посещена и ёмкость ребра > 0
                     {
                         parent[edge.To.Name] = source;
+                        // Якщо досягли стоку, повертаємо true
                         if (edge.To.Name == sink)
                             return true;
 
+                        // Якщо досягли стоку, повертаємо true
                         if (DFS(edge.To.Name, sink, visited, parent))
                             return true;
                     }
@@ -146,17 +158,18 @@ namespace KURSACH
                 return false;
             }
 
-            // Нахождение максимального потока
+
+            // Знаходження максимального потоку
             public int FindMaxFlow(string source, string sink)
             {
                 int maxFlow = 0;
                 Dictionary<string, bool> visited = new Dictionary<string, bool>();
                 Dictionary<string, string> parent = new Dictionary<string, string>();
 
-                // Пока есть увеличивающий путь
+                // Поки існує збільшувальний шлях
                 while (DFS(source, sink, visited, parent))
                 {
-                    // Найти минимальную ёмкость на пути
+                    // Знаходимо мінімальну ємність на шляху
                     int pathFlow = int.MaxValue;
                     string s = sink;
 
@@ -168,7 +181,7 @@ namespace KURSACH
                         s = p;
                     }
 
-                    // Обновить остаточные ёмкости рёбер
+                    // Оновлюємо залишкові ємності ребер
                     s = sink;
                     while (s != source)
                     {
@@ -176,7 +189,7 @@ namespace KURSACH
                         var edge = graph.GetEdges(p).Find(e => e.To.Name == s);
                         edge.Capacity -= pathFlow;
 
-                        // Если нет обратного ребра, создать его
+                        // Якщо немає зворотного ребра, створюємо його
                         var reverseEdge = graph.GetEdges(s).Find(e => e.To.Name == p);
                         if (reverseEdge == null)
                         {
@@ -192,7 +205,7 @@ namespace KURSACH
 
                     maxFlow += pathFlow;
 
-                    // Очистить visited и parent для следующего поиска пути
+                    // Очищаємо visited та parent для наступного пошуку шляху
                     visited.Clear();
                     parent.Clear();
                 }
@@ -201,6 +214,7 @@ namespace KURSACH
             }
         }
 
+        //Алгоритм Едмондса-Карпа
         public class EdmondsKarp
         {
             private Graph graph;
@@ -210,8 +224,10 @@ namespace KURSACH
                 this.graph = graph;
             }
 
+            // Пошук в ширину для знаходження збільшувального шляху
             private bool BFS(string source, string sink, Dictionary<string, bool> visited, Dictionary<string, string> parent)
             {
+                // Очищаємо масив відвіданих вершин
                 foreach (var vertex in graph.Vertices.Keys)
                 {
                     visited[vertex] = false;
@@ -227,12 +243,14 @@ namespace KURSACH
 
                     foreach (var edge in graph.GetEdges(current))
                     {
+                        // Якщо вершина ще не відвідана та ємність ребра більше за 0
                         if (!visited[edge.To.Name] && edge.Capacity > 0)
                         {
                             queue.Enqueue(edge.To.Name);
                             visited[edge.To.Name] = true;
                             parent[edge.To.Name] = current;
 
+                            // Якщо вершина ще не відвідана та ємність ребра більше за 0
                             if (edge.To.Name == sink)
                             {
                                 return true;
@@ -243,12 +261,14 @@ namespace KURSACH
                 return false;
             }
 
+            // Знаходження максимального потоку
             public int FindMaxFlow(string source, string sink)
             {
                 int maxFlow = 0;
                 Dictionary<string, bool> visited = new Dictionary<string, bool>();
                 Dictionary<string, string> parent = new Dictionary<string, string>();
 
+                // Поки існує збільшувальний шлях
                 while (BFS(source, sink, visited, parent))
                 {
                     int pathFlow = int.MaxValue;
@@ -269,6 +289,7 @@ namespace KURSACH
                         var edge = graph.GetEdges(p).Find(e => e.To.Name == s);
                         edge.Capacity -= pathFlow;
 
+                        // Якщо немає зворотного ребра, створюємо його
                         var reverseEdge = graph.GetEdges(s).Find(e => e.To.Name == p);
                         if (reverseEdge == null)
                         {
@@ -287,97 +308,99 @@ namespace KURSACH
             }
         }
 
-        // Переменные для графа и алгоритма
-        private Graph graph;
-        private FordFulkerson fordFulkerson;
-        private EdmondsKarp edmondsKarp;
+        // Перемінні для графа та алгоритмів
+        private Graph graph; // Граф для зберігання даних
+        private FordFulkerson fordFulkerson; // Алгоритм Форда-Фалкерсона для знаходження максимального потоку
+        private EdmondsKarp edmondsKarp; // Алгоритм Едмондса-Карпа для знаходження максимального потоку
 
-        // Конструктор формы
+        // Конструктор форми
         public Form1()
         {
             InitializeComponent();
-            graph = new Graph();
-            fordFulkerson = new FordFulkerson(graph);
+            graph = new Graph(); ; // Створення нового об'єкта графа
+            fordFulkerson = new FordFulkerson(graph); // Ініціалізація алгоритму Форда-Фалкерсона
+            edmondsKarp = new EdmondsKarp(graph); // Ініціалізація алгоритму Едмондса-Карпа
 
-            // Создаем объект Form2
+            // Створення об'єкта Form2
             Form2 form2 = new Form2();
-            form2.TopLevel = false;  // Это нужно, чтобы форма не открывалась как отдельное окно
-            form2.FormBorderStyle = FormBorderStyle.None;  // Убираем границы
-            form2.Dock = DockStyle.Fill;  // Делаем форму, которая будет заполнять панель
+            form2.TopLevel = false;  // Це необхідно, щоб форма не відкривалась як окреме вікно
+            form2.FormBorderStyle = FormBorderStyle.None;  // Прибираємо межі вікна
+            form2.Dock = DockStyle.Fill;  // Налаштовуємо форму так, щоб вона заповнювала панель
 
-            // Убедитесь, что panel1 существует в дизайне
+            // Переконатись, що panel1 існує в дизайні
             panel1.Controls.Add(form2);
 
-            // Показываем Form2
+            // Показуємо Form2
             form2.Show();
         }
 
-        // Добавление вершины
+        // Додавання вершини
         private void btnAddVertex_Click(object sender, EventArgs e)
         {
-            string vertexName = txtVertexName.Text.Trim();
-            if (!string.IsNullOrEmpty(vertexName))
+            string vertexName = txtVertexName.Text.Trim(); // Отримуємо назву вершини з текстового поля
+            if (!string.IsNullOrEmpty(vertexName)) // Перевірка, що назва не порожня
             {
-                graph.AddVertex(vertexName);
-                lstVertices.Items.Add(vertexName);
-                txtVertexName.Clear();
+                graph.AddVertex(vertexName); // Додаємо вершину до графа
+                lstVertices.Items.Add(vertexName); // Додаємо вершину до списку на формі
+                txtVertexName.Clear(); // Очищаємо текстове поле
             }
         }
 
-        // Удаление вершины
+        // Видалення вершини
         private void btnRemoveVertex_Click(object sender, EventArgs e)
         {
-            string vertexName = lstVertices.SelectedItem?.ToString();
-            if (!string.IsNullOrEmpty(vertexName))
+            string vertexName = lstVertices.SelectedItem?.ToString(); // Отримуємо вибрану вершину зі списку
+            if (!string.IsNullOrEmpty(vertexName)) // Перевірка, що вершина вибрана
             {
-                graph.RemoveVertex(vertexName);
-                lstVertices.Items.Remove(vertexName);
+                graph.RemoveVertex(vertexName); // Видаляємо вершину з графа
+                lstVertices.Items.Remove(vertexName); // Видаляємо вершину зі списку на формі
             }
         }
 
-        // Добавление ребра
+        // Додавання ребра
         private void btnAddEdge_Click(object sender, EventArgs e)
         {
-            string from = txtFromVertex.Text.Trim();
-            string to = txtToVertex.Text.Trim();
-            int capacity;
-            if (int.TryParse(txtEdgeCapacity.Text.Trim(), out capacity))
+            string from = txtFromVertex.Text.Trim(); // Вершина від якої йде ребро
+            string to = txtToVertex.Text.Trim(); // Вершина до якої йде ребро
+            int capacity; // Ємність ребра
+            if (int.TryParse(txtEdgeCapacity.Text.Trim(), out capacity)) // Перевірка чи ємність правильна
             {
-                graph.AddEdge(from, to, capacity);
-                lstEdges.Items.Add($"{from} -> {to}, Capacity: {capacity}");
-                txtFromVertex.Clear();
+                graph.AddEdge(from, to, capacity); // Додаємо ребро до графа
+                lstEdges.Items.Add($"{from} -> {to}, Capacity: {capacity}"); // Додаємо інформацію про ребро до списку
+                txtFromVertex.Clear(); // Очищаємо поля введення
                 txtToVertex.Clear();
                 txtEdgeCapacity.Clear();
             }
         }
 
-        // Удаление ребра
+        // Видалення ребра
         private void btnRemoveEdge_Click(object sender, EventArgs e)
         {
-            string edgeInfo = lstEdges.SelectedItem?.ToString();
-            if (!string.IsNullOrEmpty(edgeInfo))
+            string edgeInfo = lstEdges.SelectedItem?.ToString(); // Отримуємо вибране ребро зі списку
+            if (!string.IsNullOrEmpty(edgeInfo)) // Перевірка, що ребро вибране
             {
-                var parts = edgeInfo.Split(new string[] { " -> ", ", Capacity: " }, StringSplitOptions.None);
-                if (parts.Length == 3)
+                var parts = edgeInfo.Split(new string[] { " -> ", ", Capacity: " }, StringSplitOptions.None); // Розділяємо інформацію про ребро
+                if (parts.Length == 3) // Перевірка правильності розділення
                 {
-                    string from = parts[0];
-                    string to = parts[1];
-                    graph.RemoveEdge(from, to);
-                    lstEdges.Items.Remove(edgeInfo);
+                    string from = parts[0]; // Вершина від якої йде ребро
+                    string to = parts[1]; // Вершина до якої йде ребро
+                    graph.RemoveEdge(from, to); // Видаляємо ребро з графа
+                    lstEdges.Items.Remove(edgeInfo); // Видаляємо ребро зі списку на формі
                 }
             }
         }
 
-        // Изменение веса ребра
+        // Зміна ваги ребра
         private void btnUpdateEdge_Click(object sender, EventArgs e)
         {
-            string from = txtFromVertex.Text.Trim();
-            string to = txtToVertex.Text.Trim();
-            int newCapacity;
-            if (int.TryParse(txtEdgeCapacity.Text.Trim(), out newCapacity))
+            string from = txtFromVertex.Text.Trim(); // Вершина від якої йде ребро
+            string to = txtToVertex.Text.Trim(); // Вершина до якої йде ребро
+            int newCapacity; // Нова ємність ребра
+            if (int.TryParse(txtEdgeCapacity.Text.Trim(), out newCapacity)) // Перевірка на правильність введення ємності
             {
-                graph.UpdateEdgeWeight(from, to, newCapacity);
-                lstEdges.Items.Clear();
+                graph.UpdateEdgeWeight(from, to, newCapacity);// Оновлюємо ємність ребра в графі
+                lstEdges.Items.Clear(); // Очищаємо список ребер
+                // Додаємо всі ребра в список
                 foreach (var vertex in graph.Vertices.Keys)
                 {
                     foreach (var edge in graph.GetEdges(vertex))
@@ -385,101 +408,106 @@ namespace KURSACH
                         lstEdges.Items.Add($"{edge.From.Name} -> {edge.To.Name}, Capacity: {edge.Capacity}");
                     }
                 }
-                txtFromVertex.Clear();
+                txtFromVertex.Clear(); // Очищаємо поля введення
                 txtToVertex.Clear();
                 txtEdgeCapacity.Clear();
             }
         }
 
-        // Нахождение максимального потока
+        // Знаходження максимального потоку за алгоритмом Форда-Фалкерсона
         private void btnFordFulkerson_Click(object sender, EventArgs e)
         {
-            string source = txtSource.Text.Trim();
-            string sink = txtSink.Text.Trim();
+            string source = txtSource.Text.Trim(); // Вершина джерела
+            string sink = txtSink.Text.Trim(); // Вершина стоку
 
-            if (!string.IsNullOrEmpty(source) && !string.IsNullOrEmpty(sink))
+            if (!string.IsNullOrEmpty(source) && !string.IsNullOrEmpty(sink)) // Перевірка, що джерело та стік введені
             {
-                int maxFlow = fordFulkerson.FindMaxFlow(source, sink);
-                lblMaxFlow.Text = $"Max Flow (Ford-Fulkerson): {maxFlow}";
+                int maxFlow = fordFulkerson.FindMaxFlow(source, sink); // Знаходимо максимальний потік
+                lblMaxFlow.Text = $"Максимальний поток(Форда-Фалкерсона): {maxFlow}"; // Виводимо результат на форму
             }
         }
 
+        // Знаходження максимального потоку за алгоритмом Едмондса-Карпа
         private void btnEdmondsKarp_Click(object sender, EventArgs e)
         {
-            string source = txtSource.Text.Trim();
-            string sink = txtSink.Text.Trim();
+            string source = txtSource.Text.Trim(); // Вершина джерела
+            string sink = txtSink.Text.Trim(); // Вершина стоку
 
-            if (!string.IsNullOrEmpty(source) && !string.IsNullOrEmpty(sink))
+            if (!string.IsNullOrEmpty(source) && !string.IsNullOrEmpty(sink)) // Перевірка, що джерело та стік введені
             {
-                int maxFlow = edmondsKarp.FindMaxFlow(source, sink);
-                lblMaxFlow.Text = $"Max Flow (Edmonds-Karp): {maxFlow}";
+                int maxFlow = edmondsKarp.FindMaxFlow(source, sink); // Знаходимо максимальний потік
+                lblMaxFlow.Text = $"Максимальний поток(Едмондса-Карпа): {maxFlow}"; // Виводимо результат на форму
             }
         }
 
+        // Перевірка точності обчислення для обох алгоритмів
         private void btnMathBench_Click(object sender, EventArgs e)
         {
             string[] graphData = File.ReadAllLines("C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\graf.txt"); //Путь к файлу
-            List<int[,]> graphs = ParseGraphs(graphData);
-            List<int> fordFulkersonResults = new List<int>();
-            List<int> edmondsKarpResults = new List<int>();
+            List<int[,]> graphs = ParseGraphs(graphData); // Парсинг даних графа в список
+            List<int> fordFulkersonResults = new List<int>(); // Список результатів алгоритму Форда-Фалкерсона
+            List<int> edmondsKarpResults = new List<int>(); // Список результатів алгоритму Едмондса-Карпа
 
-            foreach (var graph in graphs)
+            foreach (var graph in graphs) // Проходимо по всіх графах
             {
-                fordFulkersonResults.Add(FindMaxFlowUsingFordFulkerson(graph, 1, graph.GetLength(0) - 1)); // 1 is source, last is sink
+                fordFulkersonResults.Add(FindMaxFlowUsingFordFulkerson(graph, 1, graph.GetLength(0) - 1));  // Знаходимо максимальний потік для кожного графа
                 edmondsKarpResults.Add(FindMaxFlowUsingEdmondsKarp(graph, 1, graph.GetLength(0) - 1));
             }
 
-            double fordFulkersonAccuracy = fordFulkersonResults.Average();
-            double edmondsKarpAccuracy = edmondsKarpResults.Average();
+            double fordFulkersonAccuracy = fordFulkersonResults.Average(); // Обчислюємо середнє значення точності для Форда-Фалкерсона
+            double edmondsKarpAccuracy = edmondsKarpResults.Average(); // Обчислюємо середнє значення точності для Едмондса-Карпа
 
             string result = "Точність алгоритма Форда-Фалкерсона: " + fordFulkersonAccuracy + "\n" +
-                            "Точність алгоритма Эдмондса-Карпа: " + edmondsKarpAccuracy + "\n";
+                            "Точність алгоритма Eдмондса-Карпа: " + edmondsKarpAccuracy + "\n";
 
+            // Додаємо результати для кожного графа
             result += "\nАлгоритм Форда-Фалкерсона\n";
             for (int i = 0; i < fordFulkersonResults.Count; i++)
             {
                 result += $"Максимальний поток графа{i + 1}: {fordFulkersonResults[i]}\n";
             }
 
-            result += "\nАлгоритм Эдмондса-Карпа\n";
+            result += "\nАлгоритм Eдмондса-Карпа\n";
             for (int i = 0; i < edmondsKarpResults.Count; i++)
             {
                 result += $"Максимальний поток графа{i + 1}: {edmondsKarpResults[i]}\n";
             }
 
-            File.WriteAllText("result.txt", result);
-            MessageBox.Show(result, "Результат перевірки точності");
+            File.WriteAllText("result.txt", result); // Запис результату в файл
+            MessageBox.Show(result, "Результат перевірки точності"); // Показуємо результат у вікні повідомлення
         }
 
+        // Парсинг даних графа з текстового файлу
         private List<int[,]> ParseGraphs(string[] graphData)
         {
             List<int[,]> graphs = new List<int[,]>();
             List<string> graphLines = new List<string>();
             foreach (var line in graphData)
             {
-                if (line.StartsWith("//graf"))
+                if (line.StartsWith("//graf")) // Початок нового графа
                 {
                     if (graphLines.Count > 0)
                     {
-                        graphs.Add(ParseGraph(graphLines));
+                        graphs.Add(ParseGraph(graphLines)); // Додаємо попередній граф
                         graphLines.Clear();
                     }
                 }
                 else
                 {
-                    graphLines.Add(line);
+                    graphLines.Add(line); // Додаємо рядок до даних графа
                 }
             }
 
             if (graphLines.Count > 0)
-                graphs.Add(ParseGraph(graphLines));
+                graphs.Add(ParseGraph(graphLines)); // Додаємо останній граф
 
             return graphs;
         }
 
+        // Парсинг одного графа з рядків
         private int[,] ParseGraph(List<string> graphLines)
         {
-            int[,] graph = new int[8, 8]; // Размер матрицы зависит от количества вершин
+            int[,] graph = new int[8, 8]; // Розмірність матриці залежить від кількості вершин
 
             foreach (var line in graphLines)
             {
@@ -488,7 +516,7 @@ namespace KURSACH
 
                 var parts = line.Split(',');
 
-                if (parts.Length == 3)
+                if (parts.Length == 3) // Перевірка на коректність формату
                 {
                     string part1 = parts[0].Trim();
                     string part2 = parts[1].Trim();
@@ -497,9 +525,9 @@ namespace KURSACH
                     int u, v, capacity;
                     if (int.TryParse(part1, out u) && int.TryParse(part2, out v) && int.TryParse(part3, out capacity))
                     {
-                        u -= 1; // Индексация с 1, а в массиве с 0
+                        u -= 1; // Зміщення індексації з 1 на 0
                         v -= 1;
-                        graph[u, v] = capacity;
+                        graph[u, v] = capacity; // Встановлюємо ємність ребра
                     }
                     else
                     {
@@ -515,119 +543,145 @@ namespace KURSACH
             return graph;
         }
 
+        //Сазонова Наталія КНТ-133
+
         // Алгоритм Форда-Фалкерсона
         private int FindMaxFlowUsingFordFulkerson(int[,] graph, int source, int sink)
         {
+            // Створюємо копію графа для роботи з залишковим графом
             int[,] residualGraph = (int[,])graph.Clone();
-            int maxFlow = 0;
+            int maxFlow = 0; // Загальний максимальний потік
 
+            // Виконуємо пошук шляху поки можна знайти новий шлях від джерела до стоку
             while (true)
             {
-                int[] parent = new int[graph.GetLength(0)];
+                int[] parent = new int[graph.GetLength(0)];  // Массив для збереження батьківської вершини в шляху
 
                 for (int i = 0; i < parent.Length; i++)
                 {
-                    parent[i] = -1;
+                    parent[i] = -1; // Ініціалізація всіх значень як не відвідані
                 }
 
+                // Використовуємо чергу для пошуку в ширину
                 Queue<int> queue = new Queue<int>();
-                queue.Enqueue(source);
-                parent[source] = -2;
+                queue.Enqueue(source); // Початок з джерела
+                parent[source] = -2; // Встановлюємо джерело як корінь дерева
 
+                // Пошук шляху в ширину
                 while (queue.Count > 0)
                 {
-                    int u = queue.Dequeue();
+                    int u = queue.Dequeue(); // Витягуємо вершину з черги
 
-                    for (int v = 0; v < graph.GetLength(1); v++)
+                    for (int v = 0; v < graph.GetLength(1); v++) // Перевірка всіх сусідів вершини u
                     {
-                        if (parent[v] == -1 && residualGraph[u, v] > 0)
+                        if (parent[v] == -1 && residualGraph[u, v] > 0) // Якщо вершина не відвідана і є залишковий потік
                         {
-                            parent[v] = u;
-                            if (v == sink)
+                            parent[v] = u; // Встановлюємо батьківську вершину для v
+                            if (v == sink) // Якщо ми знайшли шлях до стоку, завершуємо пошук
                                 break;
-                            queue.Enqueue(v);
+                            queue.Enqueue(v); // Додаємо сусіда до черги для подальшого пошуку
                         }
                     }
                 }
 
+                // Якщо не знайдено шлях, виходимо з циклу
                 if (parent[sink] == -1)
                     break;
 
+                // Знаходимо мінімальний потік на знайденому шляху
                 int pathFlow = int.MaxValue;
-                for (int v = sink; v != source; v = parent[v])
+                for (int v = sink; v != source; v = parent[v]) // Відновлюємо шлях від стоку до джерела
                 {
                     int u = parent[v];
-                    pathFlow = Math.Min(pathFlow, residualGraph[u, v]);
+                    pathFlow = Math.Min(pathFlow, residualGraph[u, v]); // Мінімізуємо потік за всім шляхом
                 }
 
-                for (int v = sink; v != source; v = parent[v])
+                // Оновлюємо залишковий граф
+                for (int v = sink; v != source; v = parent[v]) // Оновлюємо ребра графа
                 {
                     int u = parent[v];
-                    residualGraph[u, v] -= pathFlow;
-                    residualGraph[v, u] += pathFlow;
+                    residualGraph[u, v] -= pathFlow; // Зменшуємо потік в напрямку u -> v
+                    residualGraph[v, u] += pathFlow; // Збільшуємо зворотний потік для v -> u
                 }
 
-                maxFlow += pathFlow;
+                maxFlow += pathFlow; // Додаємо потік поточного шляху до загального потоку
             }
-            return maxFlow;
+            return maxFlow; // Повертаємо максимальний потік
         }
 
-        // Алгоритм Эдмондса-Карпа (отдельный метод)
+        // Алгоритм Едмондса-Карпа
         private int FindMaxFlowUsingEdmondsKarp(int[,] graph, int source, int sink)
         {
-            int[,] residualGraph = (int[,])graph.Clone();
-            int maxFlow = 0;
+            int[,] residualGraph = (int[,])graph.Clone(); // Створюємо копію графа для роботи з залишковим графом
+            int maxFlow = 0; // Загальний максимальний потік
 
+            // Виконуємо пошук шляху поки можна знайти новий шлях від джерела до стоку
             while (true)
             {
-                int[] parent = new int[graph.GetLength(0)];
-
+                int[] parent = new int[graph.GetLength(0)]; // Масив для збереження батьківських вершин у шляху
                 for (int i = 0; i < parent.Length; i++)
                 {
-                    parent[i] = -1;
+                    parent[i] = -1; // Ініціалізація всіх значень як не відвідані
                 }
 
+                // Використовуємо чергу для пошуку в ширину (BFS)
                 Queue<int> queue = new Queue<int>();
-                queue.Enqueue(source);
-                parent[source] = -2;
+                queue.Enqueue(source); // Початок з джерела
+                parent[source] = -2; // Встановлюємо джерело як корінь дерева
 
+                bool foundPath = false; // Чи знайшли шлях до стоку
+
+                // Пошук шляху в ширину
                 while (queue.Count > 0)
                 {
-                    int u = queue.Dequeue();
+                    int u = queue.Dequeue(); // Витягуємо вершину з черги
 
-                    for (int v = 0; v < graph.GetLength(1); v++)
+                    for (int v = 0; v < graph.GetLength(1); v++) // Перевірка всіх сусідів вершини u
                     {
+                        // Якщо вершина не відвідана і є залишковий потік
                         if (parent[v] == -1 && residualGraph[u, v] > 0)
                         {
-                            parent[v] = u;
-                            if (v == sink)
+                            parent[v] = u; // Встановлюємо батьківську вершину для v
+                            if (v == sink) // Якщо ми знайшли шлях до стоку, завершуємо пошук
+                            {
+                                foundPath = true;
                                 break;
-                            queue.Enqueue(v);
+                            }
+                            queue.Enqueue(v); // Додаємо сусіда до черги для подальшого пошуку
                         }
                     }
+
+                    if (foundPath) // Якщо шлях знайдений, виходимо з циклу
+                        break;
                 }
 
+                // Якщо не знайдено шлях, виходимо з циклу
                 if (parent[sink] == -1)
                     break;
 
+                // Знаходимо мінімальний потік на знайденому шляху
                 int pathFlow = int.MaxValue;
-                for (int v = sink; v != source; v = parent[v])
+                for (int v = sink; v != source; v = parent[v]) // Відновлюємо шлях від стоку до джерела
                 {
                     int u = parent[v];
-                    pathFlow = Math.Min(pathFlow, residualGraph[u, v]);
+                    pathFlow = Math.Min(pathFlow, residualGraph[u, v]); // Мінімізуємо потік по шляху
                 }
 
-                for (int v = sink; v != source; v = parent[v])
+                // Оновлюємо залишковий граф
+                for (int v = sink; v != source; v = parent[v]) // Оновлюємо ребра графа
                 {
                     int u = parent[v];
-                    residualGraph[u, v] -= pathFlow;
-                    residualGraph[v, u] += pathFlow;
+                    residualGraph[u, v] -= pathFlow; // Зменшуємо потік в напрямку u -> v
+                    residualGraph[v, u] += pathFlow; // Збільшуємо зворотний потік для v -> u
                 }
 
-                maxFlow += pathFlow;
+                maxFlow += pathFlow; // Додаємо потік поточного шляху до загального потоку
             }
-            return maxFlow;
+
+            return maxFlow; // Повертаємо максимальний потік
         }
+
+
 
         // Обробник на кнопці "Про алгоритми" — виводить основи роботи алгоритмів
         private void proalgoritm(object sender, EventArgs e)

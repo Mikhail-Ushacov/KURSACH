@@ -183,18 +183,18 @@ namespace KURSACH
             this.btnEdmondsKarp.Name = "btnEdmondsKarp";
             this.btnEdmondsKarp.Size = new System.Drawing.Size(123, 35);
             this.btnEdmondsKarp.TabIndex = 14;
-            this.btnEdmondsKarp.Text = "Алгоритм Эдмондса-Карпа";
+            this.btnEdmondsKarp.Text = "Алгоритм Eдмондса-Карпа";
             this.btnEdmondsKarp.UseVisualStyleBackColor = true;
             this.btnEdmondsKarp.Click += new System.EventHandler(this.btnEdmondsKarp_Click);
             // 
             // lblMaxFlow
             // 
             this.lblMaxFlow.AutoSize = true;
-            this.lblMaxFlow.Location = new System.Drawing.Point(6, 398);
+            this.lblMaxFlow.Location = new System.Drawing.Point(-1, 411);
             this.lblMaxFlow.Name = "lblMaxFlow";
-            this.lblMaxFlow.Size = new System.Drawing.Size(58, 13);
+            this.lblMaxFlow.Size = new System.Drawing.Size(122, 13);
             this.lblMaxFlow.TabIndex = 14;
-            this.lblMaxFlow.Text = "Max Flow: ";
+            this.lblMaxFlow.Text = "Максимальний поток: ";
             // 
             // panel1
             // 
