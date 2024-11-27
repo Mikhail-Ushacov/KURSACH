@@ -3,7 +3,11 @@
   "WorkspaceRootPath": "C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|c:\\users\\owner\\documents\\visual studio 2022\\saves\\kursach\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|solutionrelative:form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -11,15 +15,11 @@
       "RelativeMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|solutionrelative:graf2.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\form2.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|solutionrelative:form2.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|c:\\users\\owner\\documents\\visual studio 2022\\saves\\kursach\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{364B0FB5-41A7-4B62-8159-8EA781283A0F}|KURSACH.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
@@ -54,17 +54,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Form1.cs",
               "DocumentMoniker": "C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAALICAAAAAAAAAAAwwMoCAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAL0BAAAAAAAAAAAqwMwBAABcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-20T13:25:07.44Z",
               "IsPinned": true,
@@ -95,8 +95,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-20T13:25:01.491Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -113,13 +112,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Form2.cs",
               "DocumentMoniker": "C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\Form2.cs",
               "RelativeDocumentMoniker": "Form2.cs",
               "ToolTip": "C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\Form2.cs",
               "RelativeToolTip": "Form2.cs",
-              "ViewState": "AgIAAAwDAAAAAAAAAAAgwCEDAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-20T13:25:24.206Z",
               "IsPinned": true,
@@ -136,8 +135,7 @@
               "ViewState": "AgIAAAUAAAAAAAAAAAAQwBAAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-20T13:25:32.354Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -149,8 +147,7 @@
               "RelativeToolTip": "Form2.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-20T13:25:19.578Z",
-              "IsPinned": true,
-              "EditorCaption": " [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]"
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -162,12 +159,11 @@
               "RelativeToolTip": "graf3.txt",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAC4AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2024-11-21T17:36:56.834Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-21T17:36:56.834Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "graf2.txt",
               "DocumentMoniker": "C:\\Users\\Owner\\Documents\\Visual Studio 2022\\Saves\\KURSACH\\graf2.txt",
               "RelativeDocumentMoniker": "graf2.txt",
@@ -175,8 +171,7 @@
               "RelativeToolTip": "graf2.txt",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAAC4AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2024-11-21T17:36:55.645Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-21T17:36:55.645Z"
             },
             {
               "$type": "Document",
@@ -188,8 +183,7 @@
               "RelativeToolTip": "graf1.txt",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2024-11-21T17:33:20.682Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-21T17:33:20.682Z"
             },
             {
               "$type": "Document",
@@ -201,8 +195,7 @@
               "RelativeToolTip": "graf.txt",
               "ViewState": "AgIAAFsBAAAAAAAAAAAgwMsBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2024-11-21T17:36:43.82Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-21T17:36:43.82Z"
             }
           ]
         }

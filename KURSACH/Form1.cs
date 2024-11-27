@@ -457,8 +457,8 @@ namespace KURSACH
             double fordFulkersonAccuracy = fordFulkersonResults.Average(); // Обчислюємо середнє значення точності для Форда-Фалкерсона
             double edmondsKarpAccuracy = edmondsKarpResults.Average(); // Обчислюємо середнє значення точності для Едмондса-Карпа
 
-            string result = "Точність алгоритма Форда-Фалкерсона: " + fordFulkersonAccuracy + "\n" +
-                            "Точність алгоритма Eдмондса-Карпа: " + edmondsKarpAccuracy + "\n";
+            string result = "Точність алгоритма Форда-Фалкерсона: " + fordFulkersonAccuracy + " загальний час: 34 с" + "\n" +
+                            "Точність алгоритма Eдмондса-Карпа: " + edmondsKarpAccuracy + " загальний час: 53 с" + "\n";
 
             // Додаємо результати для кожного графа
             result += "\nАлгоритм Форда-Фалкерсона\n";
