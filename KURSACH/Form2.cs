@@ -1,4 +1,4 @@
-﻿using KURSACH.Properties;
+using KURSACH.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -790,12 +790,23 @@ namespace KURSACH
                 int pricePerUnit = productPrices[product];
                 int quantity = (int)numericUpDownQuantity.Value;
 
+                int deliveryTimeff = 0;
+                int deliveryTimeed = 0;
+
                 // Розрахунок часу доставки за допомогою алгоритмів
-                int deliveryTimeff = (int)Math.Floor((double)quantity / maxFlow) + 1;
-                int deliveryTimeed = (int)Math.Floor((double)quantity / maxFlow1) + 1;
+                if (quantity <= maxFlow)
+                {
+                    deliveryTimeff = 1;
+                    deliveryTimeed = 1;
+                }
+                else
+                {
+                    deliveryTimeff = (int)Math.Floor((double)quantity / maxFlow) + 1;
+                    deliveryTimeed = (int)Math.Floor((double)quantity / maxFlow1) + 1;
+                }
                 
                 // Додаткові витрати на доставку, якщо доставка займає 1 день
-                int deliverySurcharge = deliveryTimeff == 1 ? 20 : 0;
+                int deliverySurcharge = deliveryTimeff <= 3 ? 20 : 0;
 
                 // Загальна вартість товару та доставки
                 int totalCost = quantity * pricePerUnit + deliverySurcharge;
@@ -803,8 +814,8 @@ namespace KURSACH
                 // Виведення результатів на форму
                 labelResult.Text = $"Товар: {product}\n" +
                                    $"Кількість: {quantity}\n" +
-                                   $"Час доставки: {deliveryTimeff} дн.\n" +
-                                   $"Час доставки: {deliveryTimeed} дн.\n" +
+                                   $"Час доставки(Форда-Фалкерсона): {deliveryTimeff} дн.\n" +
+                                   $"Час доставки(Эдмондса-Карпа): {deliveryTimeed} дн.\n" +
                                    $"Загальна вартість: {totalCost} грн.";
             };
 
@@ -813,9 +824,9 @@ namespace KURSACH
             {
                 //BackColor = System.Drawing.SystemColors.InactiveCaption,
                 BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D,
-                Location = new System.Drawing.Point(12, 200), // Позиція панелі
+                Location = new System.Drawing.Point(0, 200), // Позиція панелі
                 Name = "panel1",
-                Size = new System.Drawing.Size(280, 150), // Розміри панелі
+                Size = new System.Drawing.Size(300, 150), // Розміри панелі
                 TabIndex = 9,
             };
             resultForm.Controls.Add(panel1); // Додаємо панель на форму
