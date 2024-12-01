@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -366,7 +366,7 @@ namespace KURSACH
             if (int.TryParse(txtEdgeCapacity.Text.Trim(), out capacity)) // Перевірка чи ємність правильна
             {
                 graph.AddEdge(from, to, capacity); // Додаємо ребро до графа
-                lstEdges.Items.Add($"{from} -> {to}, Capacity: {capacity}"); // Додаємо інформацію про ребро до списку
+                lstEdges.Items.Add($"{from} -> {to}, Вага: {capacity}"); // Додаємо інформацію про ребро до списку
                 txtFromVertex.Clear(); // Очищаємо поля введення
                 txtToVertex.Clear();
                 txtEdgeCapacity.Clear();
@@ -379,7 +379,7 @@ namespace KURSACH
             string edgeInfo = lstEdges.SelectedItem?.ToString(); // Отримуємо вибране ребро зі списку
             if (!string.IsNullOrEmpty(edgeInfo)) // Перевірка, що ребро вибране
             {
-                var parts = edgeInfo.Split(new string[] { " -> ", ", Capacity: " }, StringSplitOptions.None); // Розділяємо інформацію про ребро
+                var parts = edgeInfo.Split(new string[] { " -> ", ", Вага: " }, StringSplitOptions.None); // Розділяємо інформацію про ребро
                 if (parts.Length == 3) // Перевірка правильності розділення
                 {
                     string from = parts[0]; // Вершина від якої йде ребро
@@ -405,7 +405,7 @@ namespace KURSACH
                 {
                     foreach (var edge in graph.GetEdges(vertex))
                     {
-                        lstEdges.Items.Add($"{edge.From.Name} -> {edge.To.Name}, Capacity: {edge.Capacity}");
+                        lstEdges.Items.Add($"{edge.From.Name} -> {edge.To.Name}, Вага: {edge.Capacity}");
                     }
                 }
                 txtFromVertex.Clear(); // Очищаємо поля введення
