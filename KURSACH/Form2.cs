@@ -1,4 +1,4 @@
-using KURSACH.Properties;
+﻿using KURSACH.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -106,7 +106,7 @@ namespace KURSACH
                                 }
                                 else
                                 {
-                                    MessageBox.Show($"Невірний формат координат у рядку: {line}");
+                                    MessageBox.Show($"Неверный формат координат в строке: {line}");
                                 }
                             }
                         }
@@ -131,7 +131,7 @@ namespace KURSACH
                                 }
                                 else
                                 {
-                                    MessageBox.Show($"Неправильний формат ребер у рядку: {line}");
+                                    MessageBox.Show($"Неверный формат рёбер в строке: {line}");
                                 }
                             }
                         }
@@ -139,12 +139,12 @@ namespace KURSACH
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Помилка під час читання файлу: " + ex.Message);
+                    MessageBox.Show("Ошибка при чтении файла: " + ex.Message);
                 }
             }
             else
             {
-                MessageBox.Show("Файл не знайдено: " + filePath);
+                MessageBox.Show("Файл не найден: " + filePath);
             }
         }
 
