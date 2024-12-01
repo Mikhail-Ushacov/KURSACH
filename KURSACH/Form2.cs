@@ -1,4 +1,4 @@
-﻿using KURSACH.Properties;
+using KURSACH.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -106,7 +106,7 @@ namespace KURSACH
                                 }
                                 else
                                 {
-                                    MessageBox.Show($"Неверный формат координат в строке: {line}");
+                                    MessageBox.Show($"Невірний формат координат у рядку: {line}");
                                 }
                             }
                         }
@@ -131,7 +131,7 @@ namespace KURSACH
                                 }
                                 else
                                 {
-                                    MessageBox.Show($"Неверный формат рёбер в строке: {line}");
+                                    MessageBox.Show($"Неправильний формат ребер у рядку: {line}");
                                 }
                             }
                         }
@@ -139,12 +139,12 @@ namespace KURSACH
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при чтении файла: " + ex.Message);
+                    MessageBox.Show("Помилка під час читання файлу: " + ex.Message);
                 }
             }
             else
             {
-                MessageBox.Show("Файл не найден: " + filePath);
+                MessageBox.Show("Файл не знайдено: " + filePath);
             }
         }
 
@@ -804,7 +804,7 @@ namespace KURSACH
                     deliveryTimeff = (int)Math.Floor((double)quantity / maxFlow) + 1;
                     deliveryTimeed = (int)Math.Floor((double)quantity / maxFlow1) + 1;
                 }
-                
+
                 // Додаткові витрати на доставку, якщо доставка займає 1 день
                 int deliverySurcharge = deliveryTimeff <= 3 ? 20 : 0;
 
@@ -824,7 +824,7 @@ namespace KURSACH
             {
                 //BackColor = System.Drawing.SystemColors.InactiveCaption,
                 BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D,
-                Location = new System.Drawing.Point(0, 200), // Позиція панелі
+                Location = new System.Drawing.Point(1, 200), // Позиція панелі
                 Name = "panel1",
                 Size = new System.Drawing.Size(300, 150), // Розміри панелі
                 TabIndex = 9,
