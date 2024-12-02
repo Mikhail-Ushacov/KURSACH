@@ -1,5 +1,4 @@
-﻿using KURSACH.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -680,38 +679,6 @@ namespace KURSACH
             };
             resultForm.Controls.Add(label3); // Додаємо лейбл на форму
 
-            //var label1 = new Label
-            //{
-            //    AutoSize = true,
-            //    BackColor = System.Drawing.Color.Transparent,
-            //    Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204))),
-            //    Location = new System.Drawing.Point(12, 9),
-            //    Name = "label1",
-            //    Size = new System.Drawing.Size(304, 23),
-            //    TabIndex = 0,
-            //    Text = "Оберіть граф (шлях) для замовлення"
-            //};
-            //resultForm.Controls.Add(label1);
-
-            //var comboBoxGraph = new ComboBox
-            //{
-            //    Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204))),
-            //    FormattingEnabled = true,
-            //    Location = new System.Drawing.Point(16, 35),
-            //    Name = "comboBoxGraph",
-            //    Size = new System.Drawing.Size(121, 31),
-            //    TabIndex = 1,
-            //};
-            //comboBoxGraph.Items.AddRange(new object[] { "graf1.txt", "graf2.txt", "graf3.txt" });
-            //resultForm.Controls.Add(comboBoxGraph);
-
-            //comboBoxGraph.SelectedIndexChanged += (s, args) =>
-            //{
-            //    string selectedGraph = comboBoxGraph.SelectedItem.ToString();
-            //    LoadCoordinatesFromFile(Path.Combine(folderPath, selectedGraph));  // Загрузка данных из файла
-            //    CreateButtons();  // Перерисовываем кнопки
-            //};
-
             // Створюємо поле для вводу кількості товару (NumericUpDown)
             var numericUpDownQuantity = new NumericUpDown
             {
@@ -730,7 +697,7 @@ namespace KURSACH
             {
                 //BackColor = System.Drawing.SystemColors.InactiveCaption,
                 Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204))),
-                Location = new System.Drawing.Point(132, 120), // Позиція кнопки
+                Location = new System.Drawing.Point(1, 120), // Позиція кнопки
                 Name = "buttonCalculate",
                 Size = new System.Drawing.Size(140, 52),
                 TabIndex = 7,
@@ -764,6 +731,7 @@ namespace KURSACH
                 TabIndex = 10,
             };
             resultForm.Controls.Add(comboBoxProduct); // Додаємо комбобокс на форму
+
             comboBoxProduct.Items.AddRange(new object[] {
                 "хліб 5", // Товар 1
                 "молоко 10", // Товар 2
@@ -781,9 +749,6 @@ namespace KURSACH
             // Обробник натискання кнопки для розрахунку даних посилки
             buttonCalculate.Click += (object clickSender, EventArgs clickEvent) =>
             {
-                //string selectedGraph = comboBoxGraph.SelectedItem.ToString();
-                //int maxFlow = graphs[selectedGraph];
-
                 // Отримуємо обраний товар та його ціну
                 string product = comboBoxProduct.SelectedItem.ToString();
                 int pricePerUnit = productPrices[product];
@@ -816,6 +781,26 @@ namespace KURSACH
                                    $"Час доставки(Форда-Фалкерсона): {deliveryTimeff} дн.\n" +
                                    $"Час доставки(Эдмондса-Карпа): {deliveryTimeed} дн.\n" +
                                    $"Загальна вартість: {totalCost} грн.";
+
+                string textToSave = $"Замовлення:\n" +
+                                    $"Товар: {product}\n" +
+                                    $"Кількість: {quantity}\n" +
+                                    $"Час доставки (Форда-Фалкерсона): {deliveryTimeff} дн.\n" +
+                                    $"Час доставки (Едмондса-Карпа): {deliveryTimeed} дн.\n" +
+                                    $"Загальна вартість: {totalCost} грн.\n\n";
+                try
+                {
+                    // Записываем текст в файл (перезапишет файл, если он существует)
+                    File.AppendAllText("order.txt", textToSave);
+
+                    // Сообщение о том, что запись прошла успешно
+                    //MessageBox.Show("Збереженно у файл!");
+                }
+                catch (Exception ex)
+                {
+                    // Если произошла ошибка, выводим сообщение
+                    MessageBox.Show($"Помилка при збереженні файлу: {ex.Message}");
+                }
             };
 
             // Створюємо панель для розміщення результатів
@@ -831,6 +816,61 @@ namespace KURSACH
             resultForm.Controls.Add(panel1); // Додаємо панель на форму
 
             panel1.Controls.Add(labelResult);
+
+            // Створюємо кнопку для перегляду всіх замовлень
+            var buttonOrderView = new Button
+            {
+                Location = new Point(170, 120), // Позиція кнопки
+                Name = "buttonOrderView",
+                Size = new Size(140, 52),
+                Text = "Замовлення", // Текст на кнопці
+                UseVisualStyleBackColor = false,
+            };
+            resultForm.Controls.Add(buttonOrderView); // Додаємо кнопку на форму
+
+            // Обробник натискання кнопки
+            buttonOrderView.Click += (object clickSender, EventArgs clickEvent) =>
+            {
+                // Створюємо нову форму
+                var Form = new Form
+                {
+                    Text = "Замовлення",
+                    Size = new Size(360, 460), //Розмір форми
+                };
+
+                //Читаемо із файлу
+                string fileContent = File.ReadAllText("order.txt");
+
+                //Для виводу тексту
+                var resultLabel = new Label
+                {
+                    Text = fileContent, //Текст із файлу
+                    AutoSize = true, //Розмір: автоматичний
+                    Location = new Point(0, 0), // Позиція
+                    Name = "resultLabel",
+                    Font = new Font("Arial", 10, FontStyle.Regular)
+                    
+                };
+                Form.Controls.Add(resultLabel); // Додаємо на форму
+
+                // Створюємо панель
+                var panel = new Panel
+                {
+                    BorderStyle = BorderStyle.Fixed3D,
+                    Location = new Point(0, 0), // Позиція панелі
+                    Name = "panel",
+                    Size = new Size(350, 420), // Розміри панелі
+                    AutoScroll = true,
+                    
+                };
+                Form.Controls.Add(panel); // Додаємо панель на форму
+
+                panel.Controls.Add(resultLabel); // Додаємо текст на панель
+                        
+                // Відображаємо форму з калькулятором доставки
+
+                Form.ShowDialog();
+            };
 
             // Відображаємо форму з калькулятором доставки
             resultForm.ShowDialog();
